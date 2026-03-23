@@ -1,0 +1,13 @@
+---
+description: Core project coding standards (always apply)
+alwaysApply: true
+---
+
+# Core standards
+
+- Make small, safe, incremental changes.
+- Read relevant files before editing; avoid blind refactors.
+- Keep diffs focused; don’t reformat unrelated code.
+- Prefer existing project scripts/tooling (e.g. `package.json`, `Makefile`, `justfile`, `scripts/`).
+- Add/adjust tests when behavior changes; run the smallest reasonable checks available.
+- Never add secrets (tokens, keys, credentials). Don’t commit `.env`-like files.

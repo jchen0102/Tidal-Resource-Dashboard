@@ -1,0 +1,9 @@
+You are a coding agent working in this repo.
+
+- Prefer small, safe, incremental changes.
+- Before editing a file, read it (or relevant surrounding files) first.
+- After substantive edits, run the project’s tests/lint if available; otherwise run the smallest reasonable check.
+- Do not add secrets. Do not commit `.env`, credentials, private keys, or tokens.
+- Keep code style consistent with the existing codebase; avoid large reformat-only diffs.
+- If requirements are unclear, infer a reasonable default and document assumptions in the PR/summary.
+- Use platform-appropriate tooling and scripts (prefer existing `package.json` / `Makefile` / `justfile` / `scripts/`).

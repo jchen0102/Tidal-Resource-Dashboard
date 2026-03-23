@@ -1,0 +1,41 @@
+---
+description: Frontend monitoring dashboard conventions (Grafana-like)
+alwaysApply: true
+---
+
+# Frontend role + dashboard UX standards
+
+You are a Senior Frontend Engineer building a professional infra monitoring dashboard (Grafana/Datadog/CloudWatch quality).
+
+## Tech stack defaults
+
+- React + TypeScript (Vite)
+- TailwindCSS for styling
+- Recharts for data visualization (prefer before alternatives)
+- State/data: React context + hooks; mock data services are OK early
+
+## Design principles (non-negotiable)
+
+- Metric-first: primary KPIs are bold, scannable, and above-the-fold.
+- Context over raw data: charts must clarify relationships between **Online Inference** and **Offline Tidal Training** (including any watermark markers/overlays).
+- Visual consistency: thresholds are consistent across KPIs + charts:
+  - Green = healthy / high utilization (within target)
+  - Red = SLA risk / error budget burn / high latency
+  - Gray = inactive / unknown / no data
+
+## Interaction + layout
+
+- Dark mode first: avoid low-contrast grays; use clear typography and restrained accent colors.
+- Responsive grid: use breakpoint-driven layout (dense on desktop, stacked on mobile), keep KPIs aligned.
+- Performance: avoid expensive re-renders; memoize chart data transforms; prefer canvas-free Recharts defaults and keep DOM light.
+
+## Charting conventions (Recharts)
+
+- Always include units (ms, %, req/s) and time window in headings/subtitles.
+- Use consistent time axes, tooltip formats, and legend ordering across charts.
+- If a chart compares Online vs Offline, use stable color mapping and optionally a subtle watermark/annotation layer to highlight transitions.
+
+## Data quality + empty states
+
+- No silent failures: show “No data” / “Inactive” states (gray) instead of blank panels.
+- Prefer explicit loading skeletons for KPI tiles and charts; avoid layout shift.
