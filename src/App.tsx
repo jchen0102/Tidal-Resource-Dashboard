@@ -161,6 +161,15 @@ export default function App() {
     return rows.filter((r) => r.department === deptName)
   }, [data?.tidalServiceDetail, selectedDept])
 
+  const filteredTrend = useMemo(() => {
+    const trend = data?.utilizationTrend ?? []
+    if (selectedTime === '1h') return trend.slice(-1)
+    if (selectedTime === '6h') return trend.slice(-6)
+    if (selectedTime === '24h') return trend
+    // 当前 mock 仅有 24h 点位，7d 先用 24h 全量展示
+    return trend
+  }, [data?.utilizationTrend, selectedTime])
+
   return (
     <div className="min-h-full bg-gray-950 text-gray-100">
       <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-4 px-4 py-4 md:px-6 md:py-6">
@@ -288,29 +297,33 @@ export default function App() {
             />
           </div>
 
-          {/* Row 2: line chart */}
-          <Panel
-            title="部门潮汐服务资源利用率折线图 (24h)"
-            subtitle="蓝线：未开启潮汐资源 · 绿线：开启潮汐资源"
-            right={
-              <span className="rounded-md border border-white/10 bg-gray-900 px-2 py-1 text-[11px] text-gray-300">
-                Mock
-              </span>
-            }
-          >
-            <TidalUtilTrendLineChart
-              data={data?.utilizationTrend ?? []}
-              loading={loading}
-            />
-          </Panel>
-
-          {/* Row 2.5: card stats */}
-          <Panel
-            title="部门与型号潮汐卡数统计"
-            subtitle="按部门统计各型号开启潮汐卡数与在线服务卡数"
-          >
-            <DeptModelStatsTable data={filteredServiceDetail} loading={loading} />
-          </Panel>
+          {/* Row 2: line + dept/model stats */}
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+            <div className="lg:col-span-8">
+              <Panel
+                title="部门潮汐服务资源利用率折线图 (24h)"
+                subtitle="蓝线：未开启潮汐资源 · 绿线：开启潮汐资源"
+                right={
+                  <span className="rounded-md border border-white/10 bg-gray-900 px-2 py-1 text-[11px] text-gray-300">
+                    Mock
+                  </span>
+                }
+              >
+                <TidalUtilTrendLineChart
+                  data={filteredTrend}
+                  loading={loading}
+                />
+              </Panel>
+            </div>
+            <div className="lg:col-span-4">
+              <Panel
+                title="分部门分型号潮汐卡数统计"
+                subtitle="部门、型号、开启潮汐卡数、在线服务卡数"
+              >
+                <DeptModelStatsTable data={filteredServiceDetail} loading={loading} />
+              </Panel>
+            </div>
+          </div>
 
           {/* Row 3: table */}
           <Panel

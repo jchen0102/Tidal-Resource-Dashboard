@@ -181,7 +181,7 @@ export function TidalServiceDetailTable({
               { key: 'modelOwner', label: '模型负责人', w: 'w-[140px]' },
               { key: 'goldenWindow', label: '潮汐开启时间段', w: 'w-[170px]' },
               { key: 'tidalStatus', label: '潮汐状态', w: 'w-[150px]' },
-              { key: 'yesterdayCardHours', label: '昨日贡献卡时', w: 'w-[220px]' },
+              { key: 'yesterdayCardHours', label: '累积贡献卡时', w: 'w-[220px]' },
             ].map((c) => {
               const key = c.key as SortKey
               const active = key === sortKey

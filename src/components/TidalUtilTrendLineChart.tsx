@@ -103,10 +103,7 @@ export function TidalUtilTrendLineChart({
                 borderRadius: 10,
               }}
               labelStyle={{ color: 'rgba(229, 231, 235, 0.9)' }}
-              formatter={(value, name) => [
-                `${value}%`,
-                name === 'online' ? '未开启潮汐资源' : '开启潮汐资源',
-              ]}
+              formatter={(value, name) => [`${value}%`, String(name)]}
             />
 
             <Legend

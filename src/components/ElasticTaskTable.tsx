@@ -20,7 +20,7 @@ export function ElasticTaskTable({
             <th className="w-[110px] px-3 py-2 font-medium">型号</th>
             <th className="w-[110px] px-3 py-2 font-medium">卡数</th>
             <th className="w-[180px] px-3 py-2 font-medium">利用率</th>
-            <th className="w-[140px] px-3 py-2 font-medium">ERP</th>
+            <th className="w-[140px] px-3 py-2 font-medium">人物创建人</th>
             <th className="w-[180px] px-3 py-2 font-medium">部门</th>
             <th className="w-[180px] px-3 py-2 font-medium">空间</th>
           </tr>
