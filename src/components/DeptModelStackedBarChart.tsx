@@ -19,6 +19,39 @@ type ChartRow = {
   total: number
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Recharts Tooltip content props 与泛型耦合，避免与库类型冲突
+function BarTooltipContent(props: any) {
+  const { active, payload, label } = props
+  if (!active || !payload?.length) return null
+  const rows = payload as ReadonlyArray<{ name?: unknown; value?: unknown }>
+  return (
+    <div
+      className="rounded-lg border px-3 py-2 text-sm"
+      style={{
+        background: 'rgba(17, 24, 39, 0.96)',
+        borderColor: 'rgba(75, 85, 99, 0.6)',
+        color: 'rgba(229, 231, 235, 0.95)',
+      }}
+    >
+      {label != null ? (
+        <div className="mb-1 font-medium text-gray-100">{String(label)}</div>
+      ) : null}
+      <div className="space-y-0.5 text-xs text-gray-300">
+        {rows.map((entry, i) => {
+          const raw = entry.value
+          const v =
+            typeof raw === 'number' ? raw : Number(raw ?? 0)
+          return (
+            <div key={i}>
+              {String(entry.name ?? '')}: {v} Cards
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 export function DeptModelStackedBarChart({
   data,
   loading,
@@ -67,19 +100,7 @@ export function DeptModelStackedBarChart({
             tickLine={{ stroke: 'rgba(75,85,99,0.5)' }}
             axisLine={{ stroke: 'rgba(75,85,99,0.5)' }}
           />
-          <Tooltip
-            contentStyle={{
-              background: 'rgba(17, 24, 39, 0.96)',
-              border: '1px solid rgba(75, 85, 99, 0.6)',
-              borderRadius: 10,
-            }}
-            labelStyle={{ color: 'rgba(229, 231, 235, 0.9)' }}
-            formatter={(value, name) => {
-              const v =
-                typeof value === 'number' ? value : Number(value ?? 0)
-              return [`${v} Cards`, String(name ?? '')]
-            }}
-          />
+          <Tooltip content={BarTooltipContent} />
           <Legend
             formatter={(value) => (
               <span className="text-xs text-gray-200">{String(value)}</span>

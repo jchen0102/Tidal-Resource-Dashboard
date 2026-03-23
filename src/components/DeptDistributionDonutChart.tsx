@@ -16,6 +16,39 @@ function formatPct(p: number) {
   return `${(p * 100).toFixed(0)}%`
 }
 
+/** 自定义 Tooltip，避免 Recharts formatter 在严格 TS 下的类型不兼容 */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Recharts Tooltip content props 与泛型耦合
+function PieTooltipContent(props: any) {
+  const { active, payload } = props
+  if (!active || !payload?.length) return null
+  const row = payload[0]?.payload as
+    | {
+        name?: string
+        value?: number
+        percentageOfTotal?: number
+      }
+    | undefined
+  if (!row) return null
+  const v =
+    typeof row.value === 'number' ? row.value : Number(row.value ?? 0)
+  const pct = row.percentageOfTotal ?? 0
+  return (
+    <div
+      className="rounded-lg border px-3 py-2 text-sm"
+      style={{
+        background: 'rgba(17, 24, 39, 0.96)',
+        borderColor: 'rgba(75, 85, 99, 0.6)',
+        color: 'rgba(229, 231, 235, 0.95)',
+      }}
+    >
+      <div className="font-medium">{row.name}</div>
+      <div className="mt-0.5 text-xs text-gray-400">
+        {v} Cards · {formatPct(pct)} of total
+      </div>
+    </div>
+  )
+}
+
 function DonutCenterLabel({
   enabledCards,
   totalCards,
@@ -98,25 +131,7 @@ export function DeptDistributionDonutChart({
               ))}
             </Pie>
 
-            <Tooltip
-              contentStyle={{
-                background: 'rgba(17, 24, 39, 0.96)',
-                border: '1px solid rgba(75, 85, 99, 0.6)',
-                borderRadius: 10,
-              }}
-              labelStyle={{ color: 'rgba(229, 231, 235, 0.9)' }}
-              itemStyle={{ color: 'rgba(229, 231, 235, 0.9)' }}
-              formatter={(value, _name, item) => {
-                const v =
-                  typeof value === 'number' ? value : Number(value ?? 0)
-                const payload = item && typeof item === 'object' && 'payload' in item
-                  ? (item as { payload?: { percentageOfTotal?: number } })
-                      .payload
-                  : undefined
-                const pct = payload?.percentageOfTotal ?? 0
-                return [`${v} Cards · ${formatPct(pct)} of total`, '']
-              }}
-            />
+            <Tooltip content={PieTooltipContent} />
 
             <Legend
               layout="vertical"
