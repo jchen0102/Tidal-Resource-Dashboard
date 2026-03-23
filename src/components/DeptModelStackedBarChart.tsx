@@ -74,7 +74,11 @@ export function DeptModelStackedBarChart({
               borderRadius: 10,
             }}
             labelStyle={{ color: 'rgba(229, 231, 235, 0.9)' }}
-            formatter={(value: number, name: string) => [`${value} Cards`, name]}
+            formatter={(value, name) => {
+              const v =
+                typeof value === 'number' ? value : Number(value ?? 0)
+              return [`${v} Cards`, String(name ?? '')]
+            }}
           />
           <Legend
             formatter={(value) => (

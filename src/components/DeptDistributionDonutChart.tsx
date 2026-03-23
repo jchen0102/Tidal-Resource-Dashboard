@@ -106,9 +106,15 @@ export function DeptDistributionDonutChart({
               }}
               labelStyle={{ color: 'rgba(229, 231, 235, 0.9)' }}
               itemStyle={{ color: 'rgba(229, 231, 235, 0.9)' }}
-              formatter={(value: number, _name, props) => {
-                const pct = (props?.payload?.percentageOfTotal ?? 0) as number
-                return [`${value} Cards · ${formatPct(pct)} of total`, '']
+              formatter={(value, _name, item) => {
+                const v =
+                  typeof value === 'number' ? value : Number(value ?? 0)
+                const payload = item && typeof item === 'object' && 'payload' in item
+                  ? (item as { payload?: { percentageOfTotal?: number } })
+                      .payload
+                  : undefined
+                const pct = payload?.percentageOfTotal ?? 0
+                return [`${v} Cards · ${formatPct(pct)} of total`, '']
               }}
             />
 
@@ -121,12 +127,6 @@ export function DeptDistributionDonutChart({
               formatter={(value) => (
                 <span className="text-xs text-gray-200">{String(value)}</span>
               )}
-              payload={pieData.map((d, i) => ({
-                value: `${d.name} · ${formatPct(d.percentageOfTotal)}`,
-                type: 'circle' as const,
-                color: d.color,
-                id: String(i),
-              }))}
             />
           </PieChart>
         </ResponsiveContainer>
